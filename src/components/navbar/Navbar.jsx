@@ -56,8 +56,10 @@ function IconUserCircle() {
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dashboardDropdownOpen, setDashboardDropdownOpen] = useState(false);
   const [user, setUser] = useState({ name: "", email: "", avatar: "", role: "" });
   const dropdownRef = useRef(null);
+  const dashboardDropdownRef = useRef(null);
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -75,9 +77,15 @@ export default function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
+      if (dashboardDropdownRef.current && !dashboardDropdownRef.current.contains(e.target)) {
+        setDashboardDropdownOpen(false);
+      }
     };
     const onKey = (e) => {
-      if (e.key === "Escape") setDropdownOpen(false);
+      if (e.key === "Escape") {
+        setDropdownOpen(false);
+        setDashboardDropdownOpen(false);
+      }
     };
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
@@ -166,6 +174,91 @@ export default function Navbar() {
                 >
                   Home
                 </NavLink>
+              </li>
+
+              {/* Dashboard Dropdown */}
+              <li className="relative group" ref={dashboardDropdownRef}>
+                <button
+                  onClick={() => setDashboardDropdownOpen(!dashboardDropdownOpen)}
+                  className="flex items-center gap-2 w-full md:w-auto px-6 py-2 text-gray-700 hover:text-indigo-600 transition-colors md:border-b-0"
+                  aria-haspopup="menu"
+                  aria-expanded={dashboardDropdownOpen}
+                >
+                  <i className="fa-solid fa-chart-line text-sm"></i>
+                  <span>Dashboard</span>
+                  <i className={`fa-solid fa-chevron-down text-xs ml-2 md:ml-0 md:hidden transition-transform ${dashboardDropdownOpen ? 'rotate-180' : ''}`}></i>
+                </button>
+
+                {/* Mobile Dropdown */}
+                {dashboardDropdownOpen && (
+                  <ul className="md:hidden bg-gray-50 border-t border-gray-200 py-2">
+                    <li>
+                      <button
+                        onClick={() => {
+                          navigate("/demo-dashboard/brand");
+                          setMenuOpen(false);
+                          setDashboardDropdownOpen(false);
+                        }}
+                        className="block w-full text-left px-8 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                      >
+                        <i className="fa-solid fa-building mr-2"></i>
+                        As a Brand
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          navigate("/demo-dashboard/influencer");
+                          setMenuOpen(false);
+                          setDashboardDropdownOpen(false);
+                        }}
+                        className="block w-full text-left px-8 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                      >
+                        <i className="fa-solid fa-star mr-2"></i>
+                        As an Influencer
+                      </button>
+                    </li>
+                  </ul>
+                )}
+
+                {/* Desktop Dropdown */}
+                <div className={`hidden md:block absolute left-0 top-full bg-white shadow-lg rounded-lg border border-gray-100 py-2 w-56 transition-all duration-200 z-50 ${
+                  dashboardDropdownOpen 
+                    ? "opacity-100 visible" 
+                    : "opacity-0 invisible"
+                }`}>
+                  <button
+                    onClick={() => {
+                      navigate("/demo-dashboard/brand");
+                      setDashboardDropdownOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className="fa-solid fa-building text-lg text-indigo-600"></i>
+                      <div>
+                        <p className="font-semibold text-gray-900">As a Brand</p>
+                        <p className="text-xs text-gray-500">Manage campaigns & proposals</p>
+                      </div>
+                    </div>
+                  </button>
+                  <div className="border-t border-gray-100"></div>
+                  <button
+                    onClick={() => {
+                      navigate("/demo-dashboard/influencer");
+                      setDashboardDropdownOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className="fa-solid fa-star text-lg text-purple-600"></i>
+                      <div>
+                        <p className="font-semibold text-gray-900">As an Influencer</p>
+                        <p className="text-xs text-gray-500">Track your proposals & earnings</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
               </li>
 
               {/* Dashboard and Campaigns - Only for authenticated users */}

@@ -36,6 +36,7 @@ import ChatLayout from "./pages/chatLayout";
 import ProposalPayment from "./pages/ProposalPayment";
 import DisputeThread from "./pages/DisputeThread";
 import ScrollToTop from "./utills/ScrollToTop";
+import DemoDashboard from "./components/dashboard/DemoDashboard";
 
 
 
@@ -68,6 +69,9 @@ export default function App() {
           <Route path="/instagram" element={<InstagramProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* Demo Dashboard Routes - No auth required */}
+          <Route path="/demo-dashboard/:type" element={<DemoDashboard />} />
 
           {/* Dashboard and Campaign Routes */}
           <Route path="/dashboard" element={<PrivateRoute><DashboardRouter /></PrivateRoute>} />
