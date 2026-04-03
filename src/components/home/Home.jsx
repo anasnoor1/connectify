@@ -1,11 +1,9 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchLandingCounts, fetchHomeHighlights } from "../../features/home/landingSlice";
 import { motion } from "framer-motion";
 import AnimatedPage from "../AnimatedPage";
 
 import hero from "../../assets/hero-1.webp";
+import hero2 from "../../assets/hero-2.png";
 import WhyChoose from './WhyChoose'
 import Testimonials from '../home/homeComponents/Testimonials'
 import HeroSection from './homeComponents/HeroSection';
@@ -187,17 +185,68 @@ const makeSlug = (value) =>
     : "";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const stats = useSelector((state) => ({
-    totalBrands: state.landing.totalBrands,
-    totalInfluencers: state.landing.totalInfluencers,
-    topInfluencers: state.landing.topInfluencers,
-    topBrands: state.landing.topBrands,
-  }));
-  useEffect(() => {
-    dispatch(fetchLandingCounts());
-    dispatch(fetchHomeHighlights());
-  }, [dispatch]);
+  // Static data for top influencers and brands
+  const staticTopInfluencers = [
+    {
+      _id: "1",
+      name: "Anas",
+      category: "Fashion",
+      hires: 4,
+      avatar_url: "https://i.pravatar.cc/150?img=1"
+    },
+    {
+      _id: "2",
+      name: "Sarah",
+      category: "Beauty",
+      hires: 3,
+      avatar_url: "https://i.pravatar.cc/150?img=2"
+    },
+    {
+      _id: "3",
+      name: "Marcus",
+      category: "Fitness",
+      hires: 2,
+      avatar_url: "https://i.pravatar.cc/150?img=3"
+    },
+    {
+      _id: "4",
+      name: "Emma",
+      category: "Lifestyle",
+      hires: 2,
+      avatar_url: "https://i.pravatar.cc/150?img=4"
+    }
+  ];
+
+  const staticTopBrands = [
+    {
+      _id: "b1",
+      name: "Toyota",
+      industry: "Cars",
+      hires: 3,
+      avatar_url: ""
+    },
+    {
+      _id: "b2",
+      name: "Tesla",
+      industry: "Technology",
+      hires: 1,
+      avatar_url: ""
+    },
+    {
+      _id: "b3",
+      name: "Nike",
+      industry: "Sports",
+      hires: 5,
+      avatar_url: ""
+    }
+  ];
+
+  const stats = {
+    totalBrands: 52,
+    totalInfluencers: 461,
+    topInfluencers: staticTopInfluencers,
+    topBrands: staticTopBrands,
+  };
   
   const partners = [
     LogoAurora,
@@ -251,7 +300,7 @@ const Home = () => {
           <div className="absolute top-0 -right-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
           <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
           
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+          <div className="px-4 sm:px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
             <motion.div 
                initial={{ opacity: 0, x: -50 }}
                animate={{ opacity: 1, x: 0 }}
@@ -298,7 +347,7 @@ const Home = () => {
 
         {/* Partner Section */}
         <section className="py-16 bg-white overflow-hidden">
-          <div className="max-w-6xl mx-auto text-center px-6">
+          <div className="w-full text-center px-6">
             <motion.h3 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -309,26 +358,21 @@ const Home = () => {
               <span className="text-gradient">the Stars</span>
             </motion.h3>
             <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1
-                  }
-                }
+              initial={{ x: -100 }}
+              animate={{ x: 100 }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "linear"
               }}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 items-center"
+              className="flex gap-4 items-center justify-center overflow-hidden"
             >
               {partners.map((Logo, i) => (
                 <motion.div
                   key={i}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
                   <Link
                     to="/brandpartnership"
@@ -345,7 +389,7 @@ const Home = () => {
 
         {/* Top performers */}
         <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="w-full px-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
               <div>
                 <h2 className="text-3xl font-bold mt-2">Most hired talent & brands</h2>
@@ -451,8 +495,8 @@ const Home = () => {
 
         {/* About Section */}
         <section className="py-14 sm:py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
-            <img src={hero} alt="About Us" className="rounded-lg shadow-md w-full h-auto" />
+          <div className="w-full px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
+            <img src={hero2} alt="About Us" className="rounded-lg shadow-md w-full h-auto" />
             <div>
               <h2 className="text-3xl font-bold mt-2 mb-6">
                 Pioneering the Future of Talent and Influence Together
@@ -488,13 +532,13 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-6 sm:gap-10">
                 <div>
                   <p className="text-4xl font-bold text-indigo-600">
-                    {stats.totalBrands}+
+                    52+
                   </p>
                   <p>Total Brands</p>
                 </div>
                 <div>
                   <p className="text-4xl font-bold text-indigo-600">
-                    {stats.totalInfluencers}+
+                    461+
                   </p>
                   <p>Creative Influencers</p>
                 </div>
@@ -506,7 +550,7 @@ const Home = () => {
 
         {/* Services Section */}
         <section className="py-14 sm:py-20 bg-gradient-to-b from-indigo-50 to-white relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="w-full px-4 sm:px-6 relative z-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
